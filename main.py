@@ -63,7 +63,22 @@ def main():
 
     print("=== Done ===")
     print(f"Final results: Accuracy: {acc:.4f}, F1-Macro: {f1_macro:.4f}, F1-Weighted: {f1_weighted:.4f}")
+    print("\n=== Evaluating baseline model ===")
+    base_acc, base_f1_macro, base_f1_weighted = evaluate_model(trained_model, data)
 
+    print("\n=== Nettack Attack ===")
+    attacked_acc, attacked_f1_macro, attacked_f1_weighted = evaluate_with_nettack(trained_model, data)
+
+    print(f"Accuracy after Nettack attack: {attacked_acc:.4f} (drop: {base_acc - attacked_acc:.4f})")
+
+    print("\n=== Adversarial Training for robustness ===")
+    robust_model = adversarial_training(trained_model, data, num_epochs=100)
+
+    print("\n=== Evaluating robust model under Nettack attack ===")
+    robust_attacked_acc, _, _ = evaluate_with_nettack(robust_model, data)
+
+    print(f"Accuracy of robust model after attack: {robust_attacked_acc:.4f}")
+    print(f"Robustness improvement: {robust_attacked_acc - attacked_acc:.4f}")
 
 if __name__ == "__main__":
     main()
