@@ -1,5 +1,6 @@
 # main.py
 import numpy as np
+import pandas as pd
 import torch
 from src.config import Config
 from src.preprocessing import preprocess_liar
@@ -7,7 +8,7 @@ from src.features import extract_tfidf_features, reduce_dimensions
 from src.graph import build_graph
 from src.model import GraphSAGE
 from src.train import prepare_data, get_class_weights, train_model, evaluate_model
-
+from src.features import extract_tfidf_features, reduce_dimensions
 
 def set_seed(seed=Config.SEED):
     np.random.seed(seed)
@@ -37,7 +38,11 @@ def main():
     reduced_features, pca = reduce_dimensions(tfidf_features)
 
     print("=== Building graph ===")
-    G = build_graph(df, Features_vect, tfidf_feature_names)
+    # G = build_graph(df, Features_vect, tfidf_feature_names)
+    tfidf_dense, tfidf_feature_names, _ = extract_tfidf_features(df)
+    reduced_features, _ = reduce_dimensions(tfidf_dense)
+    G = build_graph(df, pd.DataFrame(reduced_features), tfidf_feature_names)
+
     print("=== Preparing data for GNN ===")
     data = prepare_data(G, reduced_features, df['label'].values)
 
