@@ -121,10 +121,11 @@ def preprocess_liar(train_path, test_path, valid_path):
     categorical_cols = ['speaker', 'label', 'state info', 'party affiliation', 'venue_category', 'job_category']
     for col in categorical_cols:
         df[col] = pd.Categorical(df[col]).codes
+    df.drop(['[ID].json'], axis=1, inplace=True)
 
     df = df[df['label'] != 255].reset_index(drop=True)
-    if 'ID' in df.columns:
-        df = df.drop(columns=['ID'])
-        print("delete ID")
+    # if 'ID' in df.columns:
+    #     df = df.drop(columns=['ID'])
+    #     print("delete ID")
 
     return df
