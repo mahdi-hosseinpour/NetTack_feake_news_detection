@@ -123,5 +123,8 @@ def preprocess_liar(train_path, test_path, valid_path):
         df[col] = pd.Categorical(df[col]).codes
 
     df = df[df['label'] != 255].reset_index(drop=True)
+    if 'ID' in df.columns:
+        df = df.drop(columns=['ID'])
+        print("delete ID")
 
     return df
