@@ -37,8 +37,7 @@ def main():
     reduced_features, pca = reduce_dimensions(tfidf_features)
 
     print("=== Building graph ===")
-    G = build_graph(df)
-
+    G = build_graph(df, Features_vect, tfidf_feature_names)
     print("=== Preparing data for GNN ===")
     data = prepare_data(G, reduced_features, df['label'].values)
 
