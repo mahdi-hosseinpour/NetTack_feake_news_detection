@@ -91,6 +91,13 @@ def preprocess_liar(train_path, test_path, valid_path):
     valid = pd.read_csv(valid_path, sep='\t', header=None, names=columns, on_bad_lines='skip')
 
     df = pd.concat([train, test, valid], ignore_index=True)
+    # Drop the '[ID].json' column at the beginning of preprocessing (to prevent future errors)
+    if '[ID].json' in df.columns:
+        df = df.drop(columns=['[ID].json'])
+        print("Column '[ID].json' successfully dropped")
+    else:
+        print("Column '[ID].json' not found — it may have a different name")
+        print("Available columns:", df.columns.tolist())
 
     df = df.fillna({
         'speaker': 'unknown', 'subject(s)': 'unknown', 'venue': 'unknown',

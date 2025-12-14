@@ -37,7 +37,7 @@ def build_graph(df, Features_vect, vocab1):
         base_features = df.drop(columns=vocab1, errors='ignore').iloc[node].values
         tfidf_features = Features_vect.iloc[node].values
         combined_features = np.concatenate([base_features, tfidf_features])
-        node_features[node] = combined_features.astype(float)  # Convert to float for PyTorch compatibility
+        node_features[node] = combined_features.astype(float)
 
     nx.set_node_attributes(G, node_features, 'features')
 
