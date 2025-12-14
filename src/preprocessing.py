@@ -132,11 +132,12 @@ def preprocess_liar(train_path, test_path, valid_path):
     df = df[df['label'] != 255].reset_index(drop=True)
     print(df.columns.tolist())
 
-    # Drop the '[ID].json' column if present, as it is a string and can cause issues with numerical features
-    if '[ID].json' in df.columns:
-        df = df.drop(columns=['[ID].json'])
-        print("Column '[ID].json' successfully dropped")
+    # Drop any column related to ID regardless of its exact name (e.g., id, ID, [ID].json, etc.)
+    id_columns = [col for col in df.columns if 'id' in col.lower() or '[id]' in col.lower()]
+    if id_columns:
+        df = df.drop(columns=id_columns)
+        print(f"ID columns dropped: {id_columns}")
     else:
-        print("Column '[ID].json' not found — it may have a different name")
+        print("No ID column found")
         print("Available columns:", df.columns.tolist())
     return df

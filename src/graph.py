@@ -34,10 +34,10 @@ def build_graph(df, Features_vect, vocab1):
     # Combine base features with TF-IDF features
     node_features = {}
     for node in G.nodes():
-        base_features = df.drop(columns=vocab1, errors='ignore').iloc[node].values
+        base_features = df.drop(columns=vocab1, errors='ignore').iloc[node].values.astype(float)
         tfidf_features = Features_vect.iloc[node].values
         combined_features = np.concatenate([base_features, tfidf_features])
-        node_features[node] = combined_features.astype(float)
+        node_features[node] = combined_features
 
     nx.set_node_attributes(G, node_features, 'features')
 
